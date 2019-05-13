@@ -5,7 +5,7 @@
 # @file: utils.py
 
 import random
-
+import requests
 
 def pc_ua():
     user_agents = [
@@ -71,3 +71,35 @@ def mobile_ua():
         'Version/11.0 Mobile/15A372 Safari/604.1'
     ]
     return random.choice(user_agents)
+
+
+def get_ptype(proxy):
+    """
+
+    :param proxy: https://124.0.0.1
+    :return: https
+    """
+    return proxy.split(':')[0]
+
+class BrowerInfo(object):
+
+    def __init__(self, url, mode='pc'):
+        self.url = url
+        self.mode = mode
+
+    def get_proxy(self, ptype, source):
+        return requests.get(url=f"{self.url}?ptype={ptype}&source={source}")
+
+    def del_proxy(self, proxy, source):
+        ptype = get_ptype(proxy)
+        return requests.delete(url=f"{self.url}?ptype={ptype}&proxy={proxy}&source={source}")
+
+    def put_proxy(self, proxy, source, score):
+        ptype = get_ptype(proxy)
+        return requests.put(url=f"{self.url}?ptype={ptype}&proxy={proxy}&source={source}&score={score}")
+
+    def get_ua(self):
+        if mode == 'pc':
+            return pc_ua()
+        else:
+            return mobile_ua()
